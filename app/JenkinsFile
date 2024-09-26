@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/KarkiAnmol/Jenkins-CICD-implementation.git'
+        git branch: 'main', url: 'https://github.com/KarkiAnmol/Jenkins-CICD-implementation.git'
       }
     }
     stage('Build and Test') {
@@ -32,7 +32,7 @@ pipeline {
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "karkianmol/jenkins-cicd-pipeline:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "app/Dockerfile"
+        DOCKERFILE_LOCATION = "app/DockerFile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps {
