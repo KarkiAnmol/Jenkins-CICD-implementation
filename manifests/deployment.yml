@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: app
-        image: karkianmol/jenkins-cicd-pipeline:replaceImageTag
+        image: karkianmol/jenkins-cicd-pipeline:28
         ports:
         - containerPort: 8080
