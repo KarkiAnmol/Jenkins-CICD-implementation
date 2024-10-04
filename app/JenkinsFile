@@ -55,6 +55,15 @@ pipeline {
                script {
                 // Get the user email from the current git configuration
                 // def userEmail = sh(returnStdout: true, script: "git config --global user.email").trim()
+                
+                // Check the current working directory and list files before updating the deployment file
+                sh '''
+                    echo "Current working directory:"
+                    pwd
+
+                    echo "Listing all files in the workspace:"
+                    ls -R
+                '''
 
                 sh '''
                     git config user.email "anmolkarki101@gmail.com"
