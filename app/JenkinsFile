@@ -54,7 +54,7 @@ pipeline {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                script {
                 // Get the user email from the current git configuration
-                def userEmail = sh(returnStdout: true, script: "git config --global user.email").trim()
+                // def userEmail = sh(returnStdout: true, script: "git config --global user.email").trim()
 
                 sh '''
                     git config user.email "anmolkarki101@gmail.com"
