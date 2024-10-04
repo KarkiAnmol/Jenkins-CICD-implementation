@@ -75,7 +75,7 @@ pipeline {
                     echo "sed command executed successfully"
                     
                     echo "Adding updated file to git"
-                    git add jenkins-ci-cd-implementation/manifests/deployment.yml
+                    git add manifests/deployment.yml
                     echo "git add executed successfully"
                     
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
