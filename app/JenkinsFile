@@ -14,16 +14,16 @@ pipeline {
     }
     stage('Build and Test') {
       steps {
-        sh 'ls -ltr'
+        // sh 'ls -ltr'
         // build the project and create a JAR file
         sh 'cd app && mvn clean package'
       }
     }
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://35.154.96.8:9000"
+        SONAR_URL = "http://3.110.220.248:9000"
       }
-      steps {
+      steps { 
         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
           sh 'cd java && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
         }
@@ -32,7 +32,7 @@ pipeline {
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "karkianmol/jenkins-cicd-pipeline:${BUILD_NUMBER}"
-        DOCKERFILE_LOCATION = "app/DockerFile"
+        DOCKERFILE_LOCATION = "app/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps {
@@ -52,15 +52,20 @@ pipeline {
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+               script {
+                // Get the user email from the current git configuration
+                def userEmail = sh(returnStdout: true, script: "git config --global user.email").trim()
+
                 sh '''
-                    git config user.email "anmol.xyz@gmail.com"
+                    git config user.email "${userEmail}"
                     git config user.name "Anmol Karki"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                    git add app/manifests/deployment.yml
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" jenkins-ci-cd-implementation/manifests/deployment.yml
+                    git add jenkins-ci-cd-implementation/manifests/deployment.yml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
+               }
             }
         }
     }
