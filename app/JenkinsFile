@@ -62,7 +62,7 @@ pipeline {
                     BUILD_NUMBER=${BUILD_NUMBER}
 
                     echo "Updating deployment.yml file"
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" jenkins-ci-cd-implementation/manifests/deployment.yml
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" jenkins-cicd-implementation/manifests/deployment.yml
                     echo "sed command executed successfully"
                     
                     echo "Adding updated file to git"
